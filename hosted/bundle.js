@@ -153,9 +153,9 @@ var PokeListClass = void 0;
 var handlePoke = function handlePoke(e) {
   e.preventDefault();
 
-  $("#pokeMessage").animate({ width: 'hide' }, 350);
+  $("#domoMessage").animate({ width: 'hide' }, 350);
 
-  if ($("#pokeName").val() == '' || $("#pokeAge").val() == '' || $("#pokeDexNumber").val() == '') {
+  if ($("#pokeName").val() == '' || $("#pokeLevel").val() == '' || $("#pokeDexNumber").val() == '') {
     handleError("RAWR! All fields are required");
     return false;
   }
@@ -185,10 +185,10 @@ var renderPoke = function renderPoke() {
     React.createElement("input", { id: "pokeName", type: "text", name: "name", placeholder: "Poke Name" }),
     React.createElement(
       "label",
-      { htmlFor: "age" },
-      "Age: "
+      { htmlFor: "level" },
+      "Level: "
     ),
-    React.createElement("input", { id: "pokeAge", type: "text", name: "age", placeholder: "Poke Age" }),
+    React.createElement("input", { id: "pokeLevel", type: "text", name: "level", placeholder: "Current Level" }),
     React.createElement(
       "label",
       { htmlFor: "pokeDexNumber" },
@@ -217,7 +217,7 @@ var renderPokeList = function renderPokeList() {
     return React.createElement(
       "div",
       { key: poke._id, className: "poke" },
-      React.createElement("img", { src: "/assets/img/domoface.jpeg", alt: "domo face", className: "domoFace" }),
+      React.createElement("img", { src: "/assets/img/pokeIcon.png", alt: "pokeball", className: "pokeFace" }),
       React.createElement(
         "h3",
         { className: "pokeName" },
@@ -227,9 +227,9 @@ var renderPokeList = function renderPokeList() {
       ),
       React.createElement(
         "h3",
-        { className: "pokeAge" },
-        " Age: ",
-        poke.age,
+        { className: "pokeLevel" },
+        " Level: ",
+        poke.level,
         " "
       ),
       React.createElement(

@@ -6,9 +6,9 @@ let PokeListClass;
 const handlePoke = (e) => {
   e.preventDefault();
   
-  $("#pokeMessage").animate({ width: 'hide' }, 350);
+  $("#domoMessage").animate({ width: 'hide' }, 350);
   
-  if($("#pokeName").val() == '' || $("#pokeAge").val() == '' || $("#pokeDexNumber").val() == '') {
+  if($("#pokeName").val() == '' || $("#pokeLevel").val() == '' || $("#pokeDexNumber").val() == '') {
     handleError("RAWR! All fields are required");
     return false;
   }
@@ -31,8 +31,8 @@ const renderPoke = function() {
     >
       <label htmlFor="name">Name: </label>
       <input id="pokeName" type="text" name="name" placeholder="Poke Name"/>
-      <label htmlFor="age">Age: </label>
-      <input id="pokeAge" type="text" name="age" placeholder="Poke Age"/>
+      <label htmlFor="level">Level: </label>
+      <input id="pokeLevel" type="text" name="level" placeholder="Current Level"/>
       <label htmlFor="pokeDexNumber">Number (1-151): </label>
       <input id="pokeDexNumber" type="text" name="pokeDexNumber" placeholder="pokeDex # (1-151)"/>
       <input type="hidden" name="_csrf" value={this.props.csrf} />
@@ -54,9 +54,9 @@ const renderPokeList = function() {
   const pokeNodes = this.state.data.map(function(poke) {
     return (
     <div key={poke._id} className="poke">
-      <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
+      <img src="/assets/img/pokeIcon.png" alt="pokeball" className="pokeFace" />
       <h3 className="pokeName"> Name: {poke.name} </h3>
-      <h3 className="pokeAge"> Age: {poke.age} </h3>
+      <h3 className="pokeLevel"> Level: {poke.level} </h3>
       <h3 className="pokeDexNumber"> PokeDex Number: {poke.pokeDexNumber} </h3>
     </div>
     );    

@@ -10,7 +10,7 @@ const makerPage = (req, res) => {
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    return res.render('app', { csrfToken: req.csrfToken(), pokes: docs });
+    return res.render('pokeApp', { csrfToken: req.csrfToken(), pokes: docs });
   });
 };
 
@@ -30,7 +30,7 @@ const makePoke = (req, res) => {
 
   const pokePromise = newPoke.save();
 
-  pokePromise.then(() => res.json({ redirect: '/maker' }));
+  pokePromise.then(() => res.json({ redirect: '/pokeMaker' }));
 
   pokePromise.catch((err) => {
     console.log(err);
