@@ -10,7 +10,7 @@ var handleDomo = function handleDomo(e) {
 
   $("#domoMessage").animate({ width: 'hide' }, 350);
 
-  if ($("#domoName").val() == '' || $("#domoAge").val() == '') {
+  if ($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoDexNumber").val() == '') {
     handleError("RAWR! All fields are required");
     return false;
   }
@@ -44,6 +44,12 @@ var renderDomo = function renderDomo() {
       "Age: "
     ),
     React.createElement("input", { id: "domoAge", type: "text", name: "age", placeholder: "Domo Age" }),
+    React.createElement(
+      "label",
+      { htmlFor: "domoDexNumber" },
+      "Number (1-151): "
+    ),
+    React.createElement("input", { id: "domoDexNumber", type: "text", name: "domoDexNumber", placeholder: "DomoDex # (1-151)" }),
     React.createElement("input", { type: "hidden", name: "_csrf", value: this.props.csrf }),
     React.createElement("input", { className: "makeDomoSubmit", type: "submit", value: "Make Domo" })
   );
@@ -79,6 +85,13 @@ var renderDomoList = function renderDomoList() {
         { className: "domoAge" },
         " Age: ",
         domo.age,
+        " "
+      ),
+      React.createElement(
+        "h3",
+        { className: "domoDexNumber" },
+        " DomoDex Number: ",
+        domo.domoDexNumber,
         " "
       )
     );
@@ -119,6 +132,151 @@ var setup = function setup(csrf) {
   domoForm = ReactDOM.render(React.createElement(DomoFormClass, { csrf: csrf }), document.querySelector("#makeDomo"));
 
   domoRenderer = ReactDOM.render(React.createElement(DomoListClass, null), document.querySelector("#domos"));
+};
+
+var getToken = function getToken() {
+  sendAjax('GET', '/getToken', null, function (result) {
+    setup(result.csrfToken);
+  });
+};
+
+$(document).ready(function () {
+  getToken();
+});
+"use strict";
+
+var pokeRenderer = void 0;
+var pokeForm = void 0;
+var PokeFormClass = void 0;
+var PokeListClass = void 0;
+
+var handlePoke = function handlePoke(e) {
+  e.preventDefault();
+
+  $("#pokeMessage").animate({ width: 'hide' }, 350);
+
+  if ($("#pokeName").val() == '' || $("#pokeAge").val() == '' || $("#pokeDexNumber").val() == '') {
+    handleError("RAWR! All fields are required");
+    return false;
+  }
+
+  sendAjax('POST', $("#pokeForm").attr("action"), $("#pokeForm").serialize(), function () {
+    pokeRenderer.loadPokesFromServer();
+  });
+
+  return false;
+};
+
+var renderPoke = function renderPoke() {
+  return React.createElement(
+    "form",
+    { id: "pokeForm",
+      onSubmit: this.handleSubmit,
+      name: "pokeForm",
+      action: "/pokemaker",
+      method: "POST",
+      className: "pokeForm"
+    },
+    React.createElement(
+      "label",
+      { htmlFor: "name" },
+      "Name: "
+    ),
+    React.createElement("input", { id: "pokeName", type: "text", name: "name", placeholder: "Poke Name" }),
+    React.createElement(
+      "label",
+      { htmlFor: "age" },
+      "Age: "
+    ),
+    React.createElement("input", { id: "pokeAge", type: "text", name: "age", placeholder: "Poke Age" }),
+    React.createElement(
+      "label",
+      { htmlFor: "pokeDexNumber" },
+      "Number (1-151): "
+    ),
+    React.createElement("input", { id: "pokeDexNumber", type: "text", name: "pokeDexNumber", placeholder: "pokeDex # (1-151)" }),
+    React.createElement("input", { type: "hidden", name: "_csrf", value: this.props.csrf }),
+    React.createElement("input", { className: "makePokeSubmit", type: "submit", value: "Make Poke" })
+  );
+};
+
+var renderPokeList = function renderPokeList() {
+  if (this.state.data.length === 0) {
+    return React.createElement(
+      "div",
+      { className: "pokeList" },
+      React.createElement(
+        "h3",
+        { className: "emptyPoke" },
+        "No Pokes yet"
+      )
+    );
+  }
+
+  var pokeNodes = this.state.data.map(function (poke) {
+    return React.createElement(
+      "div",
+      { key: poke._id, className: "poke" },
+      React.createElement("img", { src: "/assets/img/domoface.jpeg", alt: "domo face", className: "domoFace" }),
+      React.createElement(
+        "h3",
+        { className: "pokeName" },
+        " Name: ",
+        poke.name,
+        " "
+      ),
+      React.createElement(
+        "h3",
+        { className: "pokeAge" },
+        " Age: ",
+        poke.age,
+        " "
+      ),
+      React.createElement(
+        "h3",
+        { className: "pokeDexNumber" },
+        " PokeDex Number: ",
+        poke.pokeDexNumber,
+        " "
+      )
+    );
+  });
+
+  return React.createElement(
+    "div",
+    { className: "pokeList" },
+    pokeNodes
+  );
+};
+
+var setup = function setup(csrf) {
+  PokeFormClass = React.createClass({
+    displayName: "PokeFormClass",
+
+    handleSubmit: handlePoke,
+    render: renderPoke
+  });
+
+  PokeListClass = React.createClass({
+    displayName: "PokeListClass",
+
+    loadPokesFromServer: function loadPokesFromServer() {
+      sendAjax('GET', '/getPokes', null, function (data) {
+        this.setState({ data: data.pokes });
+      }.bind(this));
+    },
+    getInitialState: function getInitialState() {
+      return { data: [] };
+    },
+    componentDidMount: function componentDidMount() {
+      this.loadPokesFromServer();
+    },
+    render: renderPokeList
+  });
+
+  pokeForm = ReactDOM.render(React.createElement(PokeFormClass, { csrf: csrf }), document.querySelector("#makePoke"));
+
+  pokeRenderer = ReactDOM.render(React.createElement(PokeListClass, null), document.querySelector("#pokes"));
 };
 
 var getToken = function getToken() {

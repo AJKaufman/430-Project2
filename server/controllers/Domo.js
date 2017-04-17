@@ -15,13 +15,14 @@ const makerPage = (req, res) => {
 };
 
 const makeDomo = (req, res) => {
-  if (!req.body.name || !req.body.age) {
+  if (!req.body.name || !req.body.age || !req.body.domoDexNumber) {
     return res.status(400).json({ error: 'RAWR! Both name and age are required' });
   }
 
   const domoData = {
     name: req.body.name,
     age: req.body.age,
+    domoDexNumber: req.body.domoDexNumber,
     owner: req.session.account._id,
   };
 

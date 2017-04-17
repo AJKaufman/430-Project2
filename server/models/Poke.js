@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const _ = require('underscore');
 
-let DomoModel = {};
+let PokeModel = {};
 
 // mongoose.Types.ObjectID is a function that
 // converts string ID to real mongo ID
 const convertId = mongoose.Types.ObjectId;
 const setName = (name) => _.escape(name).trim();
 
-const DomoSchema = new mongoose.Schema({
+const PokeSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -17,13 +17,14 @@ const DomoSchema = new mongoose.Schema({
     set: setName,
   },
 
-  age: {
+  level: {
     type: Number,
     min: 0,
+    max: 100,
     required: true,
   },
   
-  domoDexNumber: {
+  pokeDexNumber: {
     type: Number,
     min: 1,
     max: 151,
@@ -42,22 +43,22 @@ const DomoSchema = new mongoose.Schema({
   },
 });
 
-DomoSchema.statics.toAPI = (doc) => ({
+PokeSchema.statics.toAPI = (doc) => ({
   name: doc.name,
-  age: doc.age,
-  domoDexNumber: doc.domoDexNumber,
+  level: doc.level,
+  pokeDexNumber: doc.pokeDexNumber,
 });
 
-DomoSchema.statics.findByOwner = (ownerId, callback) => {
+PokeSchema.statics.findByOwner = (ownerId, callback) => {
   const search = {
     owner: convertId(ownerId),
   };
 
-  return DomoModel.find(search).select('name age domoDexNumber').exec(callback);
+  return PokeModel.find(search).select('name level pokeDexNumber').exec(callback);
 };
 
-DomoModel = mongoose.model('Domo', DomoSchema);
+PokeModel = mongoose.model('Poke', PokeSchema);
 
-module.exports.DomoModel = DomoModel;
-module.exports.DomoSchema = DomoSchema;
+module.exports.PokeModel = PokeModel;
+module.exports.PokeSchema = PokeSchema;
 
