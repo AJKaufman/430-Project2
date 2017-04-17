@@ -249,7 +249,7 @@ var renderPokeList = function renderPokeList() {
   );
 };
 
-var setup = function setup(csrf) {
+var setupPoke = function setupPoke(csrf) {
   PokeFormClass = React.createClass({
     displayName: "PokeFormClass",
 
@@ -279,14 +279,14 @@ var setup = function setup(csrf) {
   pokeRenderer = ReactDOM.render(React.createElement(PokeListClass, null), document.querySelector("#pokes"));
 };
 
-var getToken = function getToken() {
+var getTokenPoke = function getTokenPoke() {
   sendAjax('GET', '/getToken', null, function (result) {
-    setup(result.csrfToken);
+    setupPoke(result.csrfToken);
   });
 };
 
 $(document).ready(function () {
-  getToken();
+  getTokenPoke();
 });
 "use strict";
 

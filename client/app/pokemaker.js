@@ -69,7 +69,7 @@ const renderPokeList = function() {
   );
 };
 
-const setup = function(csrf) {
+const setupPoke = function(csrf) {
   PokeFormClass = React.createClass({
     handleSubmit: handlePoke,
     render: renderPoke,
@@ -99,14 +99,14 @@ const setup = function(csrf) {
   );
 };
 
-const getToken = () => {
+const getTokenPoke = () => {
   sendAjax('GET', '/getToken', null, (result) => {
-    setup(result.csrfToken);
+    setupPoke(result.csrfToken);
   });
 };
 
 $(document).ready(function() {
-  getToken();
+  getTokenPoke();
 });
 
 
