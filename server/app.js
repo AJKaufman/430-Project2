@@ -21,8 +21,8 @@ mongoose.connect(dbURL, (err) => {
     console.log('Could not connect to database');
     throw err;
   } else {
-     console.log('connected to CatMaker');
-   }
+    console.log('connected to CatMaker');
+  }
 });
 
 let redisURL = {

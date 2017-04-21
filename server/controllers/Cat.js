@@ -5,7 +5,6 @@ const Cat = models.Cat;
 
 
 const makerPage = (req, res) => {
-    
   Cat.CatModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
@@ -17,7 +16,6 @@ const makerPage = (req, res) => {
 };
 
 const makeCat = (req, res) => {
-      
   if (!req.body.name || !req.body.age) {
     return res.status(400).json({ error: 'RAWR! Both name and age are required' });
   }
@@ -49,26 +47,29 @@ const makeCat = (req, res) => {
 
 // lets you raise your cat's happiness
 const pet = (req, res) => {
-  
   const newHappiness = req.body.happiness + 1;
-  
+
   const catPromise = req.body.save();
 
-  catPromise.then(() => res.json({ name: req.body.name, age: req.body.age, happiness: newHappiness, }));
+  catPromise.then(() => res.json({
+    name: req.body.name,
+    age: req.body.age,
+    happiness: newHappiness,
+  }));
 
   return catPromise;
-}
+};
 
 const getCats = (request, response) => {
   const req = request;
   const res = response;
-  
+
   return Cat.CatModel.findByOwner(req.session.account._id, (err, docs) => {
-    if(err) {
+    if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
-    
+
     return res.json({ cats: docs });
   });
 };

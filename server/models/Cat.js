@@ -23,7 +23,7 @@ const CatSchema = new mongoose.Schema({
     min: 0,
     required: true,
   },
-  
+
   happiness: {
     type: Number,
     min: 0,
@@ -52,7 +52,7 @@ CatSchema.statics.findByOwner = (ownerId, callback) => {
   const search = {
     owner: convertId(ownerId),
   };
-  
+
   return CatModel.find(search).select('name age happiness').exec(callback);
 };
 
