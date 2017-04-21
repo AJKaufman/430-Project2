@@ -45,7 +45,7 @@ const CatSchema = new mongoose.Schema({
 CatSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   age: doc.age,
-  happiness: 0,
+  happiness: doc.age,
 });
 
 CatSchema.statics.findByOwner = (ownerId, callback) => {

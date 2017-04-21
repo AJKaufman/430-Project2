@@ -17,9 +17,7 @@ const makerPage = (req, res) => {
 };
 
 const makeCat = (req, res) => {
-    
-  console.dir(req);
-  
+      
   if (!req.body.name || !req.body.age) {
     return res.status(400).json({ error: 'RAWR! Both name and age are required' });
   }
@@ -56,7 +54,7 @@ const pet = (req, res) => {
   
   const catPromise = req.body.save();
 
-  catPromise.then(() => res.json({ name: req.body.name, age: req.body.age, happiness: newHappiness }));
+  catPromise.then(() => res.json({ name: req.body.name, age: req.body.age, happiness: newHappiness, }));
 
   return catPromise;
 }

@@ -88,7 +88,7 @@ const renderCatList = function() {
   );
 };
 
-const setup = function(csrf) {
+const setupCatMaker = function(csrf) {
   CatFormClass = React.createClass({
     handleSubmit: handleCat,
     render: renderCat,
@@ -121,7 +121,7 @@ const setup = function(csrf) {
 
 const getToken = () => {
   sendAjax('GET', '/getToken', null, (result) => {
-    setup(result.csrfToken);
+    setupCatMaker(result.csrfToken);
   });
 };
 
