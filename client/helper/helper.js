@@ -1,10 +1,11 @@
+// using code from DomoMaker E by Aidan Kaufman
 const handleError = (message) => {
   $("#errorMessage").text(message);
-  $("#domoMessage").animate({width: 'toggle'}, 350);
+  $("#catMessage").animate({width: 'toggle'}, 350);
 };
 
 const redirect = (response) => {
-  $("#domoMessage").animate({width: 'hide'}, 350);
+  $("#catMessage").animate({width: 'hide'}, 350);
   window.location = response.redirect;
 };
 

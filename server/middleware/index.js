@@ -1,3 +1,4 @@
+// using code from DomoMaker E by Aidan Kaufman
 const requiresLogin = (req, res, next) => {
   if (!req.session.account) {
     return res.redirect('/');

@@ -1,137 +1,155 @@
 "use strict";
 
-var domoRenderer = void 0;
-var domoForm = void 0;
-var DomoFormClass = void 0;
-var DomoListClass = void 0;
+// using code from DomoMaker E by Aidan Kaufman
+var catRenderer = void 0;
+var catForm = void 0;
+var CatFormClass = void 0;
+var CatListClass = void 0;
 
-var handleDomo = function handleDomo(e) {
+var handleCat = function handleCat(e) {
   e.preventDefault();
 
-  $("#domoMessage").animate({ width: 'hide' }, 350);
+  $("#catMessage").animate({ width: 'hide' }, 350);
 
-  if ($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoDexNumber").val() == '') {
+  if ($("#catName").val() == '' || $("#catAge").val() == '') {
     handleError("RAWR! All fields are required");
     return false;
   }
 
-  sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function () {
-    domoRenderer.loadDomosFromServer();
+  sendAjax('POST', $("#catForm").attr("action"), $("#catForm").serialize(), function () {
+    catRenderer.loadCatsFromServer();
   });
 
   return false;
 };
 
-var renderDomo = function renderDomo() {
+var handlePet = function handlePet(e) {
+  console.log('pet pressed');
+
+  sendAjax('POST', $("#petForm").attr("action"), $("#petForm").serialize(), function () {
+    catRenderer.loadCatsFromServer();
+  });
+
+  return false;
+};
+
+var renderCat = function renderCat() {
   return React.createElement(
     "form",
-    { id: "domoForm",
+    { id: "catForm",
       onSubmit: this.handleSubmit,
-      name: "domoForm",
+      name: "catForm",
       action: "/maker",
       method: "POST",
-      className: "domoForm"
+      className: "catForm"
     },
     React.createElement(
       "label",
       { htmlFor: "name" },
       "Name: "
     ),
-    React.createElement("input", { id: "domoName", type: "text", name: "name", placeholder: "Domo Name" }),
+    React.createElement("input", { id: "catName", type: "text", name: "name", placeholder: "Cat Name" }),
     React.createElement(
       "label",
       { htmlFor: "age" },
       "Age: "
     ),
-    React.createElement("input", { id: "domoAge", type: "text", name: "age", placeholder: "Domo Age" }),
-    React.createElement(
-      "label",
-      { htmlFor: "domoDexNumber" },
-      "Number (1-151): "
-    ),
-    React.createElement("input", { id: "domoDexNumber", type: "text", name: "domoDexNumber", placeholder: "DomoDex # (1-151)" }),
+    React.createElement("input", { id: "catAge", type: "text", name: "age", placeholder: "Cat Age" }),
     React.createElement("input", { type: "hidden", name: "_csrf", value: this.props.csrf }),
-    React.createElement("input", { className: "makeDomoSubmit", type: "submit", value: "Make Domo" })
+    React.createElement("input", { className: "makeCatSubmit", type: "submit", value: "Buy Cat" })
   );
 };
 
-var renderDomoList = function renderDomoList() {
+var renderCatList = function renderCatList() {
   if (this.state.data.length === 0) {
     return React.createElement(
       "div",
-      { className: "domoList" },
+      { className: "catList" },
       React.createElement(
         "h3",
-        { className: "emptyDomo" },
-        "No Domos yet"
+        { className: "emptyCat" },
+        "No Cats yet"
       )
     );
   }
 
-  var domoNodes = this.state.data.map(function (domo) {
+  var catNodes = this.state.data.map(function (cat) {
+    console.dir(cat.happiness);
     return React.createElement(
       "div",
-      { key: domo._id, className: "domo" },
-      React.createElement("img", { src: "/assets/img/domoface.jpeg", alt: "domo face", className: "domoFace" }),
+      { key: cat._id, className: "cat" },
+      React.createElement("img", { src: "/assets/img/catFace.png", alt: "cat face", className: "catFace" }),
       React.createElement(
         "h3",
-        { className: "domoName" },
+        { className: "catName" },
         " Name: ",
-        domo.name,
+        cat.name,
         " "
       ),
       React.createElement(
         "h3",
-        { className: "domoAge" },
+        { className: "catAge" },
         " Age: ",
-        domo.age,
+        cat.age,
         " "
       ),
       React.createElement(
         "h3",
-        { className: "domoDexNumber" },
-        " DomoDex Number: ",
-        domo.domoDexNumber,
+        { className: "catHappiness" },
+        " Happiness: ",
+        cat.happiness,
         " "
+      ),
+      React.createElement(
+        "form",
+        { id: "petForm",
+          onSubmit: handlePet,
+          name: "petForm",
+          action: "/maker",
+          method: "POST",
+          className: "petForm"
+        },
+        React.createElement("input", { type: "hidden", name: "_csrf", value: cat.csrf }),
+        React.createElement("input", { className: "petCat", type: "submit", value: "Pet cat" })
       )
     );
   });
 
   return React.createElement(
     "div",
-    { className: "domoList" },
-    domoNodes
+    { className: "catList" },
+    catNodes
   );
 };
 
 var setup = function setup(csrf) {
-  DomoFormClass = React.createClass({
-    displayName: "DomoFormClass",
+  CatFormClass = React.createClass({
+    displayName: "CatFormClass",
 
-    handleSubmit: handleDomo,
-    render: renderDomo
+    handleSubmit: handleCat,
+    render: renderCat
   });
 
-  DomoListClass = React.createClass({
-    displayName: "DomoListClass",
+  CatListClass = React.createClass({
+    displayName: "CatListClass",
 
-    loadDomosFromServer: function loadDomosFromServer() {
-      sendAjax('GET', '/getDomos', null, function (data) {
-        this.setState({ data: data.domos });
+    loadCatsFromServer: function loadCatsFromServer() {
+      sendAjax('GET', '/getCats', null, function (data) {
+        this.setState({ data: data.cats });
       }.bind(this));
     },
     getInitialState: function getInitialState() {
       return { data: [] };
     },
     componentDidMount: function componentDidMount() {
-      this.loadDomosFromServer();
+      this.loadCatsFromServer();
     },
-    render: renderDomoList
+    render: renderCatList
   });
 
-  domoForm = ReactDOM.render(React.createElement(DomoFormClass, { csrf: csrf }), document.querySelector("#makeDomo"));
+  catForm = ReactDOM.render(React.createElement(CatFormClass, { csrf: csrf }), document.querySelector("#makeCat"));
 
-  domoRenderer = ReactDOM.render(React.createElement(DomoListClass, null), document.querySelector("#domos"));
+  catRenderer = ReactDOM.render(React.createElement(CatListClass, null), document.querySelector("#cats"));
 };
 
 var getToken = function getToken() {
@@ -145,158 +163,177 @@ $(document).ready(function () {
 });
 "use strict";
 
-var pokeRenderer = void 0;
-var pokeForm = void 0;
-var PokeFormClass = void 0;
-var PokeListClass = void 0;
+// using code from DomoMaker E by Aidan Kaufman
+var catRenderer = void 0;
+var catForm = void 0;
+var CatFormClass = void 0;
+var CatListClass = void 0;
 
-var handlePoke = function handlePoke(e) {
+var handleCat = function handleCat(e) {
   e.preventDefault();
 
-  $("#domoMessage").animate({ width: 'hide' }, 350);
+  $("#catMessage").animate({ width: 'hide' }, 350);
 
-  if ($("#pokeName").val() == '' || $("#pokeLevel").val() == '' || $("#pokeDexNumber").val() == '') {
+  if ($("#catName").val() == '' || $("#catAge").val() == '') {
     handleError("RAWR! All fields are required");
     return false;
   }
 
-  sendAjax('POST', $("#pokeForm").attr("action"), $("#pokeForm").serialize(), function () {
-    pokeRenderer.loadPokesFromServer();
+  sendAjax('POST', $("#catForm").attr("action"), $("#catForm").serialize(), function () {
+    catRenderer.loadCatsFromServer();
   });
 
   return false;
 };
 
-var renderPoke = function renderPoke() {
+var handlePet = function handlePet(e) {
+  console.log('pet pressed');
+
+  sendAjax('POST', $("#petForm").attr("action"), $("#petForm").serialize(), function () {
+    catRenderer.loadCatsFromServer();
+  });
+
+  return false;
+};
+
+var renderCat = function renderCat() {
   return React.createElement(
     "form",
-    { id: "pokeForm",
+    { id: "catForm",
       onSubmit: this.handleSubmit,
-      name: "pokeForm",
-      action: "/pokemaker",
+      name: "catForm",
+      action: "/maker",
       method: "POST",
-      className: "pokeForm"
+      className: "catForm"
     },
     React.createElement(
       "label",
       { htmlFor: "name" },
       "Name: "
     ),
-    React.createElement("input", { id: "pokeName", type: "text", name: "name", placeholder: "Poke Name" }),
+    React.createElement("input", { id: "catName", type: "text", name: "name", placeholder: "Cat Name" }),
     React.createElement(
       "label",
-      { htmlFor: "level" },
-      "Level: "
+      { htmlFor: "age" },
+      "Age: "
     ),
-    React.createElement("input", { id: "pokeLevel", type: "text", name: "level", placeholder: "Current Level" }),
-    React.createElement(
-      "label",
-      { htmlFor: "pokeDexNumber" },
-      "Number (1-151): "
-    ),
-    React.createElement("input", { id: "pokeDexNumber", type: "text", name: "pokeDexNumber", placeholder: "pokeDex # (1-151)" }),
+    React.createElement("input", { id: "catAge", type: "text", name: "age", placeholder: "Cat Age" }),
     React.createElement("input", { type: "hidden", name: "_csrf", value: this.props.csrf }),
-    React.createElement("input", { className: "makePokeSubmit", type: "submit", value: "Make Poke" })
+    React.createElement("input", { className: "makeCatSubmit", type: "submit", value: "Make Cat" })
   );
 };
 
-var renderPokeList = function renderPokeList() {
+var renderCatList = function renderCatList() {
   if (this.state.data.length === 0) {
     return React.createElement(
       "div",
-      { className: "pokeList" },
+      { className: "catList" },
       React.createElement(
         "h3",
-        { className: "emptyPoke" },
-        "No Pokes yet"
+        { className: "emptyCat" },
+        "No Cats yet"
       )
     );
   }
 
-  var pokeNodes = this.state.data.map(function (poke) {
+  var catNodes = this.state.data.map(function (cat) {
+    console.dir(cat.happiness);
     return React.createElement(
       "div",
-      { key: poke._id, className: "poke" },
-      React.createElement("img", { src: "/assets/img/pokeIcon.png", alt: "pokeball", className: "pokeFace" }),
+      { key: cat._id, className: "cat" },
+      React.createElement("img", { src: "/assets/img/catFace.png", alt: "cat face", className: "catFace" }),
       React.createElement(
         "h3",
-        { className: "pokeName" },
+        { className: "catName" },
         " Name: ",
-        poke.name,
+        cat.name,
         " "
       ),
       React.createElement(
         "h3",
-        { className: "pokeLevel" },
-        " Level: ",
-        poke.level,
+        { className: "catAge" },
+        " Age: ",
+        cat.age,
         " "
       ),
       React.createElement(
         "h3",
-        { className: "pokeDexNumber" },
-        " PokeDex Number: ",
-        poke.pokeDexNumber,
+        { className: "catHappiness" },
+        " Happiness: ",
+        cat.happiness,
         " "
+      ),
+      React.createElement(
+        "form",
+        { id: "petForm",
+          onSubmit: handlePet,
+          name: "petForm",
+          action: "/maker",
+          method: "POST",
+          className: "petForm"
+        },
+        React.createElement("input", { type: "hidden", name: "_csrf", value: cat.csrf }),
+        React.createElement("input", { className: "petCat", type: "submit", value: "Pet cat" })
       )
     );
   });
 
   return React.createElement(
     "div",
-    { className: "pokeList" },
-    pokeNodes
+    { className: "catList" },
+    catNodes
   );
 };
 
-var setupPoke = function setupPoke(csrf) {
-  PokeFormClass = React.createClass({
-    displayName: "PokeFormClass",
+var setup = function setup(csrf) {
+  CatFormClass = React.createClass({
+    displayName: "CatFormClass",
 
-    handleSubmit: handlePoke,
-    render: renderPoke
+    handleSubmit: handleCat,
+    render: renderCat
   });
 
-  PokeListClass = React.createClass({
-    displayName: "PokeListClass",
+  CatListClass = React.createClass({
+    displayName: "CatListClass",
 
-    loadPokesFromServer: function loadPokesFromServer() {
-      sendAjax('GET', '/getPokes', null, function (data) {
-        this.setState({ data: data.pokes });
+    loadCatsFromServer: function loadCatsFromServer() {
+      sendAjax('GET', '/getCats', null, function (data) {
+        this.setState({ data: data.cats });
       }.bind(this));
     },
     getInitialState: function getInitialState() {
       return { data: [] };
     },
     componentDidMount: function componentDidMount() {
-      this.loadPokesFromServer();
+      this.loadCatsFromServer();
     },
-    render: renderPokeList
+    render: renderCatList
   });
 
-  pokeForm = ReactDOM.render(React.createElement(PokeFormClass, { csrf: csrf }), document.querySelector("#makePoke"));
+  catForm = ReactDOM.render(React.createElement(CatFormClass, { csrf: csrf }), document.querySelector("#makeCat"));
 
-  pokeRenderer = ReactDOM.render(React.createElement(PokeListClass, null), document.querySelector("#pokes"));
+  catRenderer = ReactDOM.render(React.createElement(CatListClass, null), document.querySelector("#cats"));
 };
 
-var getTokenPoke = function getTokenPoke() {
+var getToken = function getToken() {
   sendAjax('GET', '/getToken', null, function (result) {
-    setupPoke(result.csrfToken);
+    setup(result.csrfToken);
   });
 };
 
 $(document).ready(function () {
-  getTokenPoke();
+  getToken();
 });
 "use strict";
 
+// using code from DomoMaker E by Aidan Kaufman
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);
-  $("#domoMessage").animate({ width: 'toggle' }, 350);
+  $("#catMessage").animate({ width: 'toggle' }, 350);
 };
 
 var redirect = function redirect(response) {
-  $("#domoMessage").animate({ width: 'hide' }, 350);
+  $("#catMessage").animate({ width: 'hide' }, 350);
   window.location = response.redirect;
 };
 

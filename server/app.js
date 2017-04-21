@@ -1,3 +1,4 @@
+// using code from DomoMaker E by Aidan Kaufman
 const path = require('path');
 const express = require('express');
 const compression = require('compression');
@@ -13,13 +14,15 @@ const csrf = require('csurf');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/DomoMaker';
+const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/CatMaker';
 
 mongoose.connect(dbURL, (err) => {
   if (err) {
     console.log('Could not connect to database');
     throw err;
-  }
+  } else {
+     console.log('connected to CatMaker');
+   }
 });
 
 let redisURL = {

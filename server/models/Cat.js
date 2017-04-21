@@ -1,33 +1,32 @@
+// using code from DomoMaker E by Aidan Kaufman
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const _ = require('underscore');
 
-let PokeModel = {};
+let CatModel = {};
 
 // mongoose.Types.ObjectID is a function that
 // converts string ID to real mongo ID
 const convertId = mongoose.Types.ObjectId;
 const setName = (name) => _.escape(name).trim();
 
-const PokeSchema = new mongoose.Schema({
+const CatSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    trum: true,
+    trim: true,
     set: setName,
   },
 
-  level: {
+  age: {
     type: Number,
     min: 0,
-    max: 100,
     required: true,
   },
   
-  pokeDexNumber: {
+  happiness: {
     type: Number,
-    min: 1,
-    max: 151,
+    min: 0,
     required: true,
   },
 
@@ -43,22 +42,22 @@ const PokeSchema = new mongoose.Schema({
   },
 });
 
-PokeSchema.statics.toAPI = (doc) => ({
+CatSchema.statics.toAPI = (doc) => ({
   name: doc.name,
-  level: doc.level,
-  pokeDexNumber: doc.pokeDexNumber,
+  age: doc.age,
+  happiness: 0,
 });
 
-PokeSchema.statics.findByOwner = (ownerId, callback) => {
+CatSchema.statics.findByOwner = (ownerId, callback) => {
   const search = {
     owner: convertId(ownerId),
   };
-
-  return PokeModel.find(search).select('name level pokeDexNumber').exec(callback);
+  
+  return CatModel.find(search).select('name age happiness').exec(callback);
 };
 
-PokeModel = mongoose.model('Poke', PokeSchema);
+CatModel = mongoose.model('Cat', CatSchema);
 
-module.exports.PokeModel = PokeModel;
-module.exports.PokeSchema = PokeSchema;
+module.exports.CatModel = CatModel;
+module.exports.CatSchema = CatSchema;
 
