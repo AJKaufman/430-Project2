@@ -29,6 +29,10 @@ const AccountSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  catHappiness: {
+    type: Number,
+    default: 0,
+  }
 });
 
 AccountSchema.statics.toAPI = doc => ({

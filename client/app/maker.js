@@ -1,8 +1,9 @@
 // using code from DomoMaker E by Aidan Kaufman
 let catRenderer;
-let catForm;
-let CatFormClass;
+let shopForm;
+let ShopFormClass;
 let CatListClass;
+let Happiness;
 
 const handleCat = (e) => {
   e.preventDefault();
@@ -14,31 +15,58 @@ const handleCat = (e) => {
     return false;
   }
   
-  sendAjax('POST', $("#catForm").attr("action"), $("#catForm").serialize(), function() {
+  sendAjax('POST', $("#shopForm").attr("action"), $("#shopForm").serialize(), function() {
     catRenderer.loadCatsFromServer();
   });
   
   return false;
 };
 
-const handlePet = (e) => {
-  console.log('pet pressed');
+const select = (cat) => {
+  console.log('select pressed');
+  console.dir(cat);
   
-  sendAjax('POST', $("#petForm").attr("action"), $("#petForm").serialize(), function() {
-    catRenderer.loadCatsFromServer();
+  CatSelect = React.createClass({
+    render: renderCatSelect
   });
+  
+  catRenderer = ReactDOM.render(
+    <CatListClass csrf={csrf} />, document.querySelector("#cats")
+  );
+  
+//  sendAjax('POST', $(e.target).attr("action"), $(e.target).serialize(), function() {
+//    catRenderer.loadCatsFromServer();
+//  });
   
   return false;
 };
 
-const renderCat = function() {
+const renderCatSelect = function() {
+    
+  let thisCat;
+    
+  sendAjax('POST', '/findByID', cat._id, function(data, callback) {
+      thisCat = data;
+  });
+    
+  return(
+    <div key={cat._id} className="cat">
+      <img src="/assets/img/catFace.png" alt="cat face" className="catFace" />
+      <h3 className="catName"> Name: {cat.name} </h3>
+      <h3 className="catAge"> Age: {cat.age} </h3>
+      <h3 className="catHappiness"> Happiness: {cat.happiness} </h3>
+    </div>
+  );
+};
+
+const renderShop = function() {
   return (
-   <form id="catForm" 
+   <form id="shopForm" 
       onSubmit={this.handleSubmit}
-      name="catForm"
+      name="shopForm"
       action="/maker"
       method="POST"
-      className="catForm"
+      className="shopForm"
     >
       <label htmlFor="name">Name: </label>
       <input id="catName" type="text" name="name" placeholder="Cat Name"/>
@@ -59,24 +87,30 @@ const renderCatList = function() {
     );
   }
   
+  console.dir(this.props.csrf);
+  const csrf = this.props.csrf;
+  
   const catNodes = this.state.data.map(function(cat) {
-    console.dir(cat.happiness);
     return (
     <div key={cat._id} className="cat">
       <img src="/assets/img/catFace.png" alt="cat face" className="catFace" />
       <h3 className="catName"> Name: {cat.name} </h3>
-      <h3 className="catAge"> Age: {cat.age} </h3>
-      <h3 className="catHappiness"> Happiness: {cat.happiness} </h3>
+      
       <form id="petForm" 
-        onSubmit={handlePet}
         name="petForm"
-        action="/maker"
+        onSubmit={() => {
+            select(cat);
+          }
+        }
+        action="/select"
         method="POST"
         className="petForm"
       >
-        <input type="hidden" name="_csrf" value={cat.csrf} />
-        <input className="petCat" type="submit" value="Pet cat" />
+        <input type="hidden" name="_id" value={cat._id} />
+        <input type="hidden" name="_csrf" value={csrf} />
+        <input className="petCat" type="submit" value="Select Cat" />
       </form>
+      
     </div>
     );    
   });
@@ -88,14 +122,23 @@ const renderCatList = function() {
   );
 };
 
-const setupCatMaker = function(csrf) {
-  CatFormClass = React.createClass({
+const CreateShopFormClass = function(csrf) {
+  // cat buying render
+  ShopFormClass = React.createClass({
     handleSubmit: handleCat,
-    render: renderCat,
+    render: renderShop,
   });
-    
+  
+  shopForm = ReactDOM.render(
+    <ShopFormClass csrf={csrf} />, document.querySelector("#cats")
+  );  
+};
+
+const CreateCatListClass = function(csrf) {
+  // cat list render
   CatListClass = React.createClass({
     loadCatsFromServer: function() {
+      console.dir(this);
       sendAjax('GET', '/getCats', null, function(data) {
         this.setState({data:data.cats});
       }.bind(this));
@@ -109,13 +152,26 @@ const setupCatMaker = function(csrf) {
     render: renderCatList
   });
   
-  catForm = ReactDOM.render(
-    <CatFormClass csrf={csrf} />, document.querySelector("#makeCat")
-  );
-  
   catRenderer = ReactDOM.render(
-    <CatListClass />, document.querySelector("#cats")
+    <CatListClass csrf={csrf} />, document.querySelector("#cats")
   );
+};
+
+const setupCatMaker = function(csrf) {
+  
+  const shopButton = document.querySelector("#shopButton");
+  shopButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    CreateShopFormClass(csrf);
+    return false;
+  });
+  
+  const catListButton = document.querySelector("#catListButton");
+  catListButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    CreateCatListClass(csrf);
+    return false;
+  });
 
 };
 

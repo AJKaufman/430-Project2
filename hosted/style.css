@@ -47,8 +47,8 @@ nav:nth-child(1) {
   background-color: #78C3FB;
 }
 
-.catForm {
-  border: 2px solid #78C3FB;
+.shopForm {
+  border: 2px solid #A565EE;
   height: 35px;
   width: 700px;
   margin-top:0px;
@@ -58,7 +58,7 @@ nav:nth-child(1) {
   border-top-right-radius: 4px;
 }
 
-.catForm label {
+.shopForm label {
   display: inline-block;
   width: 100px;
   margin-left: 10px;
@@ -67,7 +67,7 @@ nav:nth-child(1) {
   color: #09FF0E;
 }
 
-.catForm input[type=text] {
+.shopForm input[type=text] {
   float:left;
 }
 
@@ -212,7 +212,7 @@ nav:nth-child(1) {
 
 #cats {
   width: 40%;
-  min-width: 400px;
+  min-width: 600px;
   border: 2px solid #A565EE;
   border-radius: 4px;
   margin: 0 auto;

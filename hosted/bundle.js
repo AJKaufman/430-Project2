@@ -2,9 +2,10 @@
 
 // using code from DomoMaker E by Aidan Kaufman
 var catRenderer = void 0;
-var catForm = void 0;
-var CatFormClass = void 0;
+var shopForm = void 0;
+var ShopFormClass = void 0;
 var CatListClass = void 0;
+var Happiness = void 0;
 
 var handleCat = function handleCat(e) {
   e.preventDefault();
@@ -16,32 +17,77 @@ var handleCat = function handleCat(e) {
     return false;
   }
 
-  sendAjax('POST', $("#catForm").attr("action"), $("#catForm").serialize(), function () {
+  sendAjax('POST', $("#shopForm").attr("action"), $("#shopForm").serialize(), function () {
     catRenderer.loadCatsFromServer();
   });
 
   return false;
 };
 
-var handlePet = function handlePet(e) {
-  console.log('pet pressed');
+var select = function select(cat) {
+  console.log('select pressed');
+  console.dir(cat);
 
-  sendAjax('POST', $("#petForm").attr("action"), $("#petForm").serialize(), function () {
-    catRenderer.loadCatsFromServer();
+  CatSelect = React.createClass({
+    displayName: "CatSelect",
+
+    render: renderCatSelect
   });
+
+  catRenderer = ReactDOM.render(React.createElement(CatListClass, { csrf: csrf }), document.querySelector("#cats"));
+
+  //  sendAjax('POST', $(e.target).attr("action"), $(e.target).serialize(), function() {
+  //    catRenderer.loadCatsFromServer();
+  //  });
 
   return false;
 };
 
-var renderCat = function renderCat() {
+var renderCatSelect = function renderCatSelect() {
+
+  var thisCat = void 0;
+
+  sendAjax('POST', '/findByID', cat._id, function (data, callback) {
+    thisCat = data;
+  });
+
+  return React.createElement(
+    "div",
+    { key: cat._id, className: "cat" },
+    React.createElement("img", { src: "/assets/img/catFace.png", alt: "cat face", className: "catFace" }),
+    React.createElement(
+      "h3",
+      { className: "catName" },
+      " Name: ",
+      cat.name,
+      " "
+    ),
+    React.createElement(
+      "h3",
+      { className: "catAge" },
+      " Age: ",
+      cat.age,
+      " "
+    ),
+    React.createElement(
+      "h3",
+      { className: "catHappiness" },
+      " Happiness: ",
+      cat.happiness,
+      " "
+    )
+  );
+};
+
+var renderShop = function renderShop() {
   return React.createElement(
     "form",
-    { id: "catForm",
+    { id: "shopForm",
       onSubmit: this.handleSubmit,
-      name: "catForm",
+      name: "shopForm",
       action: "/maker",
       method: "POST",
-      className: "catForm"
+      className: "shopForm"
     },
     React.createElement(
       "label",
@@ -73,8 +119,10 @@ var renderCatList = function renderCatList() {
     );
   }
 
+  console.dir(this.props.csrf);
+  var csrf = this.props.csrf;
+
   var catNodes = this.state.data.map(function (cat) {
-    console.dir(cat.happiness);
     return React.createElement(
       "div",
       { key: cat._id, className: "cat" },
@@ -87,30 +135,19 @@ var renderCatList = function renderCatList() {
         " "
       ),
       React.createElement(
-        "h3",
-        { className: "catAge" },
-        " Age: ",
-        cat.age,
-        " "
-      ),
-      React.createElement(
-        "h3",
-        { className: "catHappiness" },
-        " Happiness: ",
-        cat.happiness,
-        " "
-      ),
-      React.createElement(
         "form",
         { id: "petForm",
-          onSubmit: handlePet,
           name: "petForm",
-          action: "/maker",
+          onSubmit: function onSubmit() {
+            select(cat);
+          },
+          action: "/select",
           method: "POST",
           className: "petForm"
         },
-        React.createElement("input", { type: "hidden", name: "_csrf", value: cat.csrf }),
-        React.createElement("input", { className: "petCat", type: "submit", value: "Pet cat" })
+        React.createElement("input", { type: "hidden", name: "_id", value: cat._id }),
+        React.createElement("input", { type: "hidden", name: "_csrf", value: csrf }),
+        React.createElement("input", { className: "petCat", type: "submit", value: "Select Cat" })
       )
     );
   });
@@ -122,18 +159,25 @@ var renderCatList = function renderCatList() {
   );
 };
 
-var setupCatMaker = function setupCatMaker(csrf) {
-  CatFormClass = React.createClass({
-    displayName: "CatFormClass",
+var CreateShopFormClass = function CreateShopFormClass(csrf) {
+  // cat buying render
+  ShopFormClass = React.createClass({
+    displayName: "ShopFormClass",
 
     handleSubmit: handleCat,
-    render: renderCat
+    render: renderShop
   });
 
+  shopForm = ReactDOM.render(React.createElement(ShopFormClass, { csrf: csrf }), document.querySelector("#cats"));
+};
+
+var CreateCatListClass = function CreateCatListClass(csrf) {
+  // cat list render
   CatListClass = React.createClass({
     displayName: "CatListClass",
 
     loadCatsFromServer: function loadCatsFromServer() {
+      console.dir(this);
       sendAjax('GET', '/getCats', null, function (data) {
         this.setState({ data: data.cats });
       }.bind(this));
@@ -147,9 +191,24 @@ var setupCatMaker = function setupCatMaker(csrf) {
     render: renderCatList
   });
 
-  catForm = ReactDOM.render(React.createElement(CatFormClass, { csrf: csrf }), document.querySelector("#makeCat"));
+  catRenderer = ReactDOM.render(React.createElement(CatListClass, { csrf: csrf }), document.querySelector("#cats"));
+};
 
-  catRenderer = ReactDOM.render(React.createElement(CatListClass, null), document.querySelector("#cats"));
+var setupCatMaker = function setupCatMaker(csrf) {
+
+  var shopButton = document.querySelector("#shopButton");
+  shopButton.addEventListener("click", function (e) {
+    e.preventDefault();
+    CreateShopFormClass(csrf);
+    return false;
+  });
+
+  var catListButton = document.querySelector("#catListButton");
+  catListButton.addEventListener("click", function (e) {
+    e.preventDefault();
+    CreateCatListClass(csrf);
+    return false;
+  });
 };
 
 var getToken = function getToken() {

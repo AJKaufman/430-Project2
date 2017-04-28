@@ -26,6 +26,7 @@ const CatSchema = new mongoose.Schema({
 
   happiness: {
     type: Number,
+    default: 0,
     min: 0,
     required: true,
   },
@@ -45,7 +46,8 @@ const CatSchema = new mongoose.Schema({
 CatSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   age: doc.age,
-  happiness: doc.age,
+  happiness: doc.happiness,
+  _id: doc._id,
 });
 
 CatSchema.statics.findByOwner = (ownerId, callback) => {
@@ -54,6 +56,14 @@ CatSchema.statics.findByOwner = (ownerId, callback) => {
   };
 
   return CatModel.find(search).select('name age happiness').exec(callback);
+};
+
+CatSchema.statics.findByID = (_id, callback) => {
+  const search = {
+    _id: convertId(_id),
+  };
+
+  return CatModel.findOne(search, callback);
 };
 
 CatModel = mongoose.model('Cat', CatSchema);

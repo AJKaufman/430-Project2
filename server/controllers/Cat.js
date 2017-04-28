@@ -1,8 +1,9 @@
-// using code from DomoMaker E by Aidan Kaufman
+// using code from DomoMaker E
 const models = require('../models');
 
 const Cat = models.Cat;
 
+let idNum = 0;
 
 const makerPage = (req, res) => {
   Cat.CatModel.findByOwner(req.session.account._id, (err, docs) => {
@@ -20,10 +21,14 @@ const makeCat = (req, res) => {
     return res.status(400).json({ error: 'RAWR! Both name and age are required' });
   }
 
+  // assign a new cat _id for each cat
+  idNum++;
+  
   const catData = {
     name: req.body.name,
     age: req.body.age,
     happiness: 0,
+    _id: idNum,
     owner: req.session.account._id,
   };
 
@@ -46,14 +51,16 @@ const makeCat = (req, res) => {
 };
 
 // lets you raise your cat's happiness
-const pet = (req, res) => {
-  const newHappiness = req.body.happiness + 1;
+const select = (req, res) => {
+  console.dir(req.body);
+  const thisCat = req.body._id;
+  const newHappiness = thisCat.happiness + 1;
 
-  const catPromise = req.body.save();
+  const catPromise = thisCat.save(); // AIDAN This is the Pet Cat part that's messing up
 
   catPromise.then(() => res.json({
-    name: req.body.name,
-    age: req.body.age,
+    name: thisCat.name,
+    age: thisCat.age,
     happiness: newHappiness,
   }));
 
@@ -74,7 +81,22 @@ const getCats = (request, response) => {
   });
 };
 
+const getThisCat = (request, response) => {
+  const req = request;
+  const res = response;
+
+  return Cat.CatModel.findByOwner(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    return res.json({ cats: docs });
+  });
+};
+
 module.exports.makerPage = makerPage;
 module.exports.getCats = getCats;
-module.exports.make = makeCat;
-module.exports.pet = pet;
+module.exports.getThisCat = getThisCat;
+module.exports.makeCat = makeCat;
+module.exports.select = select;
