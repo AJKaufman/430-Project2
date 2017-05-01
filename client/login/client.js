@@ -1,11 +1,14 @@
-// using code from DomoMaker E by Aidan Kaufman
+// using code from DomoMaker E
+let username;
+let pass;
+
 const handleLogin = (e) => {
   e.preventDefault();
   
-  $("#catMessage").animate({width: "hide"}, 350);
+  $("#catMessage").animate({width: "hide"}, 200);
   
   if($("#user").val() == "" || $("#pass").val() == "") {
-    handleError("RAWR! Username or password is empty");
+    handleError("Meow...Username or password is empty");
     return false;
   }
   
@@ -17,20 +20,48 @@ const handleLogin = (e) => {
   return false;
 };
 
+// handles password changing
+const handlePassChange = (e) => {
+  e.preventDefault();
+  
+  $("#catMessage").animate({width: "hide"}, 200);
+  
+  if($("#user").val() == "" || $("#pass").val() == "" || $("#passNew").val() == "") {
+    handleError("Meow...all fields are required");
+    return false;
+  }
+  
+  if($("#pass").val() === $("#passNew").val()) {
+    handleError("Meow...passwords cannot match");
+    return false;
+  }
+  
+  console.log($("input[name=_csrf]").val());
+  
+  
+  sendAjax("POST", $("#passForm").attr("action"), $("#passForm").serialize(), redirect);
+  
+  return false;
+};
+
 const handleSignup = (e) => {
   e.preventDefault();
   
-  $("#catMessage").animate({width:"hide"}, 350);
+  $("#catMessage").animate({width:"hide"}, 200);
   
   if($("#user").val() == "" || $("#pass").val() == "" || $("#pass2").val() == "") {
-    handleError("RAWR! All fields are required");
+    handleError("Meow...All fields are required");
     return false;
   }
   
   if($("#pass").val() !== $("#pass2").val()) {
-    handleError("RAWR! Passwords do not match");
+    handleError("Meow...Passwords do not match");
     return false;
   }
+  
+  username = $("#user").val();
+  pass = $("#pass").val();
+  console.log("Username = " + username + " Pass = " + pass);
   
   console.dir($("#signupForm").serialize());
   sendAjax("POST", $("#signupForm").attr("action"), $("#signupForm").serialize(), redirect);
@@ -52,6 +83,27 @@ const renderLogin = function() {
     <input id="pass" type="password" name="pass" placeholder="password"/>
     <input type="hidden" name="_csrf" value={this.props.csrf}/>
     <input className="formSubmit" type="submit" value="Sign in"/>
+  </form>
+  );
+};
+
+const renderPassChange = function() {
+  return (
+  <form id="passForm" 
+    name="passForm"
+    onSubmit={this.handleSubmit}
+    action="/changePass"
+    method="POST"
+    className="mainForm"
+  >
+    <label htmlFor="username">Username: </label>
+    <input id="user" type="text" name="username" placeholder="username"/>
+    <label htmlFor="pass">Password: </label>
+    <input id="pass" type="password" name="pass" placeholder="password"/>
+    <label htmlFor="passNew">New Password: </label>
+    <input id="passNew" type="password" name="passNew" placeholder="new password"/>
+    <input type="hidden" name="_csrf" value={this.props.csrf}/>
+    <input className="formSubmit" type="submit" value="Change pass"/>
   </form>
   );
 };
@@ -90,6 +142,18 @@ const createLoginWindow = function (csrf) {
   );
 };
 
+const createPassChangeWindow = function (csrf) {
+  const PassChangeWindow = React.createClass({
+    handleSubmit: handlePassChange,
+    render: renderPassChange
+  });
+  
+  ReactDOM.render(
+    <PassChangeWindow csrf={csrf} />,
+    document.querySelector("#content")
+  );
+};
+
 
 const createSignupWindow = function (csrf) {
   const SignupWindow = React.createClass({
@@ -109,6 +173,7 @@ const createSignupWindow = function (csrf) {
 const setup = function(csrf) {
   const loginButton = document.querySelector("#loginButton");
   const signupButton = document.querySelector("#signupButton");
+  const changePassButton = document.querySelector("#changePassButton");
   
   signupButton.addEventListener("click", (e) => {
     e.preventDefault();
@@ -121,6 +186,13 @@ const setup = function(csrf) {
     createLoginWindow(csrf);
     return false;
   });
+  
+  changePassButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    createPassChangeWindow(csrf);
+    return false;
+  });
+  
   
   createLoginWindow(csrf); // default view
 };

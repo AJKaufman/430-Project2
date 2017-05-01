@@ -1,16 +1,15 @@
 // using code from DomoMaker E by Aidan Kaufman
 const handleError = (message) => {
   $("#errorMessage").text(message);
-  $("#catMessage").animate({width: 'toggle'}, 350);
+  $("#catMessage").animate({width: 'toggle'}, 700);
 };
 
 const redirect = (response) => {
-  $("#catMessage").animate({width: 'hide'}, 350);
+  $("#catMessage").animate({width: 'hide'}, 700);
   window.location = response.redirect;
 };
 
 const sendAjax = (type, action, data, success) => {
-  console.dir(action);
   $.ajax({
      
     cache: false,

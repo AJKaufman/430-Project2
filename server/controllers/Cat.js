@@ -16,7 +16,7 @@ const makerPage = (req, res) => {
 
 const makeCat = (req, res) => {
   if (!req.body.name || !req.body.age) {
-    return res.status(400).json({ error: 'RAWR! Both name and age are required' });
+    return res.status(400).json({ error: 'Name and age, please!' });
   }
 
   // assign a new cat _id for each cat
@@ -49,16 +49,16 @@ const makeCat = (req, res) => {
 // lets you select a specific cat
 const select = (req, res) => {
   console.log("controller.select");
-  console.dir(req.body);
   
-  return Cat.CatModel.findByID(req.body.catID, (err, docs) => {
+  return Cat.CatModel.findByID(req.body._id, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    console.dir(docs);
-    return res.json({ cat: docs });
+    
+    console.dir(`docs = ${docs}`);
+    return res.json({ catInfo: docs });
   });
   
 

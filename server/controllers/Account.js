@@ -84,6 +84,45 @@ const signup = (request, response) => {
   });
 };
 
+const changePass = (request, response) => {
+  const req = request;
+  const res = response;
+
+  // cast to strings to cover up some security flaws
+  req.body.username = `${req.body.username}`;
+  req.body.pass = `${req.body.pass}`;
+  req.body.passNew = `${req.body.passNew}`;
+
+
+  return Account.AccountModel.authenticate(req.body.username, req.body.pass, (err, account) => {
+    
+    if(err || !account) {
+      return res.status(401).json({ error: 'Meow...incorrect username or pass'})
+    }
+    
+    const newAccount = account;
+    
+    return Account.AccountModel.generateHash(req.body.passNew, (salt, hash) => {
+      newAccount.password = hash;
+      newAccount.salt = salt;
+      
+      const savePromise = newAccount.save();
+      
+      savePromise.then(() => res.json({
+        password: newAccount.password,
+      }));
+      
+      savePromise.catch((saveErr) => {
+        res.json(saveErr);
+      });
+      
+      return res.json({ redirect: '/maker'});
+      
+    });
+    
+  });
+};
+
 const getToken = (request, response) => {
   const req = request;
   const res = response;
@@ -98,6 +137,7 @@ const getToken = (request, response) => {
 
 module.exports.loginPage = loginPage;
 module.exports.login = login;
+module.exports.changePass = changePass;
 module.exports.logout = logout;
 module.exports.signup = signup;
 module.exports.getToken = getToken;

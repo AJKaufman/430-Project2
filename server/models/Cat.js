@@ -63,7 +63,9 @@ CatSchema.statics.findByID = (_id, callback) => {
     _id: convertId(_id), // AIDAN
   };
 
-  return CatModel.find(search).select('name age happiness').exec(callback);
+  console.dir(search);
+  
+  return CatModel.find({_id: _id}).select('name age happiness').exec(callback);
 };
 
 CatModel = mongoose.model('Cat', CatSchema);

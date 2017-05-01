@@ -1,13 +1,16 @@
 "use strict";
 
-// using code from DomoMaker E by Aidan Kaufman
+// using code from DomoMaker E
+var username = void 0;
+var pass = void 0;
+
 var handleLogin = function handleLogin(e) {
   e.preventDefault();
 
-  $("#catMessage").animate({ width: "hide" }, 350);
+  $("#catMessage").animate({ width: "hide" }, 200);
 
   if ($("#user").val() == "" || $("#pass").val() == "") {
-    handleError("RAWR! Username or password is empty");
+    handleError("Meow...Username or password is empty");
     return false;
   }
 
@@ -18,20 +21,47 @@ var handleLogin = function handleLogin(e) {
   return false;
 };
 
+// handles password changing
+var handlePassChange = function handlePassChange(e) {
+  e.preventDefault();
+
+  $("#catMessage").animate({ width: "hide" }, 200);
+
+  if ($("#user").val() == "" || $("#pass").val() == "" || $("#passNew").val() == "") {
+    handleError("Meow...all fields are required");
+    return false;
+  }
+
+  if ($("#pass").val() === $("#passNew").val()) {
+    handleError("Meow...passwords cannot match");
+    return false;
+  }
+
+  console.log($("input[name=_csrf]").val());
+
+  sendAjax("POST", $("#passForm").attr("action"), $("#passForm").serialize(), redirect);
+
+  return false;
+};
+
 var handleSignup = function handleSignup(e) {
   e.preventDefault();
 
-  $("#catMessage").animate({ width: "hide" }, 350);
+  $("#catMessage").animate({ width: "hide" }, 200);
 
   if ($("#user").val() == "" || $("#pass").val() == "" || $("#pass2").val() == "") {
-    handleError("RAWR! All fields are required");
+    handleError("Meow...All fields are required");
     return false;
   }
 
   if ($("#pass").val() !== $("#pass2").val()) {
-    handleError("RAWR! Passwords do not match");
+    handleError("Meow...Passwords do not match");
     return false;
   }
+
+  username = $("#user").val();
+  pass = $("#pass").val();
+  console.log("Username = " + username + " Pass = " + pass);
 
   console.dir($("#signupForm").serialize());
   sendAjax("POST", $("#signupForm").attr("action"), $("#signupForm").serialize(), redirect);
@@ -62,6 +92,39 @@ var renderLogin = function renderLogin() {
     React.createElement("input", { id: "pass", type: "password", name: "pass", placeholder: "password" }),
     React.createElement("input", { type: "hidden", name: "_csrf", value: this.props.csrf }),
     React.createElement("input", { className: "formSubmit", type: "submit", value: "Sign in" })
+  );
+};
+
+var renderPassChange = function renderPassChange() {
+  return React.createElement(
+    "form",
+    { id: "passForm",
+      name: "passForm",
+      onSubmit: this.handleSubmit,
+      action: "/changePass",
+      method: "POST",
+      className: "mainForm"
+    },
+    React.createElement(
+      "label",
+      { htmlFor: "username" },
+      "Username: "
+    ),
+    React.createElement("input", { id: "user", type: "text", name: "username", placeholder: "username" }),
+    React.createElement(
+      "label",
+      { htmlFor: "pass" },
+      "Password: "
+    ),
+    React.createElement("input", { id: "pass", type: "password", name: "pass", placeholder: "password" }),
+    React.createElement(
+      "label",
+      { htmlFor: "passNew" },
+      "New Password: "
+    ),
+    React.createElement("input", { id: "passNew", type: "password", name: "passNew", placeholder: "new password" }),
+    React.createElement("input", { type: "hidden", name: "_csrf", value: this.props.csrf }),
+    React.createElement("input", { className: "formSubmit", type: "submit", value: "Change pass" })
   );
 };
 
@@ -109,6 +172,17 @@ var createLoginWindow = function createLoginWindow(csrf) {
   ReactDOM.render(React.createElement(LoginWindow, { csrf: csrf }), document.querySelector("#content"));
 };
 
+var createPassChangeWindow = function createPassChangeWindow(csrf) {
+  var PassChangeWindow = React.createClass({
+    displayName: "PassChangeWindow",
+
+    handleSubmit: handlePassChange,
+    render: renderPassChange
+  });
+
+  ReactDOM.render(React.createElement(PassChangeWindow, { csrf: csrf }), document.querySelector("#content"));
+};
+
 var createSignupWindow = function createSignupWindow(csrf) {
   var SignupWindow = React.createClass({
     displayName: "SignupWindow",
@@ -125,6 +199,7 @@ var createSignupWindow = function createSignupWindow(csrf) {
 var setup = function setup(csrf) {
   var loginButton = document.querySelector("#loginButton");
   var signupButton = document.querySelector("#signupButton");
+  var changePassButton = document.querySelector("#changePassButton");
 
   signupButton.addEventListener("click", function (e) {
     e.preventDefault();
@@ -135,6 +210,12 @@ var setup = function setup(csrf) {
   loginButton.addEventListener("click", function (e) {
     e.preventDefault();
     createLoginWindow(csrf);
+    return false;
+  });
+
+  changePassButton.addEventListener("click", function (e) {
+    e.preventDefault();
+    createPassChangeWindow(csrf);
     return false;
   });
 
@@ -155,16 +236,15 @@ $(document).ready(function () {
 // using code from DomoMaker E by Aidan Kaufman
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);
-  $("#catMessage").animate({ width: 'toggle' }, 350);
+  $("#catMessage").animate({ width: 'toggle' }, 700);
 };
 
 var redirect = function redirect(response) {
-  $("#catMessage").animate({ width: 'hide' }, 350);
+  $("#catMessage").animate({ width: 'hide' }, 700);
   window.location = response.redirect;
 };
 
 var sendAjax = function sendAjax(type, action, data, success) {
-  console.dir(action);
   $.ajax({
 
     cache: false,

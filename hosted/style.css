@@ -4,7 +4,7 @@ html, body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  background-color: #FEFBF4;
+  background-color: #D4CAA1;
 }
 
 #logo {
@@ -16,6 +16,8 @@ html, body {
 }
 
 nav {
+  border-style: solid;
+  border-left: 5px;
   width: 100%;
   height: 80px;
   padding-left: 5%;
@@ -28,7 +30,7 @@ nav:nth-child(1) {
 
 .navlink {
   padding: 5px;
-  padding-top: 1.4%;
+  padding: 1.4%;
   padding-left: 20px;
   font-size: 2em;
   float: left;
@@ -49,46 +51,56 @@ nav:nth-child(1) {
 }
 
 .shopForm {
-  border: 2px solid #A565EE;
-  height: 50px;
+  border: 4px solid black;
+  height: 60px;
   width: 700px;
   margin-top:0px;
   padding-top: 25px;
   background-color: #A565EE;
   border-radius: 4px;
+  margin-left: -20%;
 }
 
 .shopForm label {
   display: inline-block;
-  width: 100px;
+  padding: 10px;
   margin-left: 10px;
   font-size: 1.2em;
   float: left;
   color: #840032;
+  background-color: #6670D4;
+  border-radius: 2px;
+  border: 2px solid black;
 }
 
 .shopForm input[type=text] {
   float:left;
+  margin: 14px;
+  border: 2px solid black;
 }
 
 .makeCatSubmit {
   transition: background-color 0.4s ease;
   display: inline;
   width: 90px;
-  background-color: #921460;
-  border-radius: 2px;
-  color: #09FF0E;
+  background-color: #6670D4;
+  border-radius: 3px;
+  border-top-color: #363536;
+  border-left-color: #363536;
+  border-right-color: #B5B4B5;
+  border-bottom-color: #B5B4B5;
+  color: #840032;
   text-decoration: none;
-  margin-left: 40px;
+  margin: 14px;
 }
 
 .makeCatSubmit:link, .makeCatSubmit:visited, .makeCatSubmit:hover, .makeCatSubmit:active {
-  color: #09FF0E;
+  color: #840032;
 }
 
 .makeCatSubmit:hover {
   transition: background-color 0.8s ease;
-  background-color: #DB00A1;
+  background-color: #5262FA;
 }
 
 .petCat {
@@ -145,6 +157,8 @@ nav:nth-child(1) {
   padding: 3px 0px;
   color: #09FF0E;
   text-decoration: none;
+  margin-top: 20px;
+  padding: 10px;
 }
 
 .formSubmit:link, .formSubmit:visited, .formSubmit:hover, .formSubmit:active {
@@ -156,23 +170,23 @@ nav:nth-child(1) {
   background-color: #BF199C;
 }
 
-#user, #pass, #pass2 {
+#user, #pass, #pass2 #passNew {
   text-align: center;
   font-size: 1.1em;
   width: 180px;
   border-radius: 6px;
 }
 
-#user:focus, #pass:focus, #pass2:focus {
+#user:focus, #pass:focus, #pass2:focus, #passNew:focus {
   outline: none;
   box-shadow: 0px 0px 1px 1px #A565EE;
 }
 
 #catMessage {
   display:none;
-  top: 250px;
-  width: 100px;
-  height: 650px;
+  top: 100px;
+  width: 300px;
+  height: 600px;
   position: absolute;
   z-index: 200;
   right: 0px;
@@ -180,14 +194,14 @@ nav:nth-child(1) {
 }
 
 #catMessage h3 {
-  width: 100px;
+  width: 200px;
   position: absolute;
-  top: 0px;
+  top: 100px;
   left: 20px;
 }
 
 #speech {
-  height: 600px;
+  height: 300px;
   width: 250px;
   z-index:300;
 }
@@ -203,11 +217,9 @@ nav:nth-child(1) {
   z-index: 225;
   margin-top: -20px;
   margin-left: 10px;
-  height: 100px;
+  height: 200px;
   width: 300px;
-  -ms-transform: rotate(330deg);
-  -webkit-transform: rotate(330deg); 
-  transform: rotate(330deg);
+
 }
 
 #cats {
@@ -222,7 +234,7 @@ nav:nth-child(1) {
   margin: 0 auto;
   margin-top: 2px;
   margin-bottom: 2px;
-  border: 2px solid #A565EE;
+  border: 2px solid black;
   border-radius: 4px;
   background-color: #A565EE;
   padding: 10px;
@@ -232,7 +244,7 @@ nav:nth-child(1) {
 
 .cat:hover {
   transition: border-color 0.3s ease-out;
-  border-color: rgba(255,255,255, 0.8);
+  border-color: black;
   transition: background-color 0.3s ease-out;
   background-color: #F495EE;
 }
@@ -259,8 +271,14 @@ h3.catName {
   float:left;
   width: 100px;
   font-weight: bold;
-  padding-left: 65px;
+  margin-left: 65px;
+  padding: 10px;
+  padding-right: 120px;
   font-size: 1.5em;
+  background-color: #6670D4;
+  border-radius: 2px;
+  border: 2px solid black;
+
 }
 
 h3.catAge {
