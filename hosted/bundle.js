@@ -68,7 +68,7 @@ var select = function select(csrf, catID) {
       render: function render() {
         // AIDAN this is what brakes retrieving data from selecting a cat
         console.dir(thisCat);
-        renderCatSelect(thisCat);
+        return renderCatSelect(thisCat);
       }
     });
 
@@ -79,9 +79,6 @@ var select = function select(csrf, catID) {
 };
 
 var renderCatSelect = function renderCatSelect(cat) {
-
-  console.log('rendering selected cat');
-
   return React.createElement(
     "div",
     { key: cat._id, className: "cat" },

@@ -290,6 +290,15 @@ h3.catAge {
   font-size: 1.5em;
 }
 
+h3.catHappiness {
+  float:right;
+  text-align: left;
+  width: 100px;
+  font-weight: bold;
+  padding-right: 40px;
+  font-size: 1.5em;
+}
+
 .cat:first-child {
   margin-top: 10px;
 }

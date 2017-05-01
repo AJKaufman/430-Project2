@@ -63,7 +63,9 @@ const select = function(csrf, catID) {
         CatSelectClass = React.createClass({
           render: () => {                   // AIDAN this is what brakes retrieving data from selecting a cat
             console.dir(thisCat);
-            renderCatSelect(thisCat);
+            return(
+              renderCatSelect(thisCat)
+            );
           }
         });
 
@@ -76,10 +78,7 @@ const select = function(csrf, catID) {
   return false;
 };
 
-const renderCatSelect = function(cat) {
-  
-  console.log('rendering selected cat');
-  
+const renderCatSelect = function(cat) {  
   return(
     <div key={cat._id} className="cat">
       <img src="/assets/img/catFace.png" alt="cat face" className="catFace" />
