@@ -4,6 +4,7 @@ html, body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  background-color: #FEFBF4;
 }
 
 #logo {
@@ -28,13 +29,12 @@ nav:nth-child(1) {
   padding: 5px;
   padding-top: 12px;
   padding-left: 20px;
-  color: #09FF0E;
   font-size: 1.3em;
   float: left;
 }
 
 .navlink a, .navlink a:link, .navlink a:visited, .navlink a:hover, .navlink a:active {
-  color: #09FF0E;
+  color: #840032;
   text-decoration: none;
   padding: 5px;
   border-radius: 4px;
@@ -44,7 +44,7 @@ nav:nth-child(1) {
 
 .navlink a:hover {
   transition: background-color 0.8s ease;
-  background-color: #78C3FB;
+  background-color: #F495EE;
 }
 
 .shopForm {
@@ -54,8 +54,7 @@ nav:nth-child(1) {
   margin-top:0px;
   padding-top:10px;
   background-color: #A565EE;
-  border-bottom-right-radius: 4px;
-  border-top-right-radius: 4px;
+  border-radius: 4px;
 }
 
 .shopForm label {
@@ -64,7 +63,7 @@ nav:nth-child(1) {
   margin-left: 10px;
   font-size: 1.2em;
   float: left;
-  color: #09FF0E;
+  color: #840032;
 }
 
 .shopForm input[type=text] {
@@ -213,8 +212,6 @@ nav:nth-child(1) {
 #cats {
   width: 40%;
   min-width: 600px;
-  border: 2px solid #A565EE;
-  border-radius: 4px;
   margin: 0 auto;
   margin-top: 100px;
 }

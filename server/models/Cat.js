@@ -60,10 +60,10 @@ CatSchema.statics.findByOwner = (ownerId, callback) => {
 
 CatSchema.statics.findByID = (_id, callback) => {
   const search = {
-    _id: convertId(_id),
+    _id: convertId(_id), // AIDAN
   };
 
-  return CatModel.findOne(search, callback);
+  return CatModel.find(search).select('name age happiness').exec(callback);
 };
 
 CatModel = mongoose.model('Cat', CatSchema);

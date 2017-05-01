@@ -3,8 +3,6 @@ const models = require('../models');
 
 const Cat = models.Cat;
 
-let idNum = 0;
-
 const makerPage = (req, res) => {
   Cat.CatModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
@@ -22,13 +20,11 @@ const makeCat = (req, res) => {
   }
 
   // assign a new cat _id for each cat
-  idNum++;
   
   const catData = {
     name: req.body.name,
     age: req.body.age,
     happiness: 0,
-    _id: idNum,
     owner: req.session.account._id,
   };
 
@@ -50,21 +46,22 @@ const makeCat = (req, res) => {
   return catPromise;
 };
 
-// lets you raise your cat's happiness
+// lets you select a specific cat
 const select = (req, res) => {
+  console.log("controller.select");
   console.dir(req.body);
-  const thisCat = req.body._id;
-  const newHappiness = thisCat.happiness + 1;
+  
+  return Cat.CatModel.findByID(req.body.catID, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
 
-  const catPromise = thisCat.save(); // AIDAN This is the Pet Cat part that's messing up
+    console.dir(docs);
+    return res.json({ cat: docs });
+  });
+  
 
-  catPromise.then(() => res.json({
-    name: thisCat.name,
-    age: thisCat.age,
-    happiness: newHappiness,
-  }));
-
-  return catPromise;
 };
 
 const getCats = (request, response) => {
