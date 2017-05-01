@@ -55,7 +55,9 @@ const select = (req, res) => {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
-    
+
+    console.dir(`happiness = ${docs.happiness}`);
+    docs.happiness = docs.happiness + 1;
     console.dir(`happiness = ${docs.happiness}`);
     return res.json({ catInfo: docs });
   });
