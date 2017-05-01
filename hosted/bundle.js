@@ -131,7 +131,7 @@ var renderShop = function renderShop() {
     ),
     React.createElement("input", { id: "catAge", type: "text", name: "age", placeholder: "Cat Age" }),
     React.createElement("input", { type: "hidden", name: "_csrf", value: this.props.csrf }),
-    React.createElement("input", { className: "makeCatSubmit", type: "submit", value: "Buy Cat" })
+    React.createElement("input", { className: "makeCatSubmit", type: "submit", value: "Adopt Cat" })
   );
 };
 
@@ -259,6 +259,8 @@ var setupCatMaker = function setupCatMaker(csrf) {
 
     render: renderCatDiv
   });
+
+  window.onload = CreateShopFormClass(csrf);
 };
 
 // takes the token and starts the page with it

@@ -99,8 +99,8 @@ nav:nth-child(1) {
 }
 
 .makeCatSubmit:hover {
-  transition: background-color 0.8s ease;
-  background-color: #5262FA;
+  transition: background-color 0.4s ease;
+  background-color: #3C4EFA;
 }
 
 .petCat {
@@ -109,7 +109,13 @@ nav:nth-child(1) {
   width: 90px;
   background-color: #921460;
   border-radius: 4px;
-  color: #09FF0E;
+  background-color: #6670D4;
+  border-radius: 3px;
+  border-top-color: #363536;
+  border-left-color: #363536;
+  border-right-color: #B5B4B5;
+  border-bottom-color: #B5B4B5;
+  color: #840032;  
   text-decoration: none;
   margin-right: 15%;
   margin-top: 7%;
@@ -117,12 +123,12 @@ nav:nth-child(1) {
 }
 
 .petCat:link, .petCat:visited, .petCat:hover, .petCat:active {
-  color: #09FF0E;
+  color: #840032;
 }
 
 .petCat:hover {
   transition: background-color 0.4s ease;
-  background-color: #DB00A1;
+  background-color: #3C4EFA;
 }
 
 .mainForm {

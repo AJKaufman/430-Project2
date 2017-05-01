@@ -104,7 +104,7 @@ const renderShop = function() {
       <label htmlFor="age">Age: </label>
       <input id="catAge" type="text" name="age" placeholder="Cat Age"/>
       <input type="hidden" name="_csrf" value={this.props.csrf} />
-      <input className="makeCatSubmit" type="submit" value="Buy Cat" />
+      <input className="makeCatSubmit" type="submit" value="Adopt Cat" />
     </form>  
   );
 };
@@ -225,6 +225,8 @@ const setupCatMaker = function(csrf) {
     render: renderCatDiv
   });
 
+  window.onload = CreateShopFormClass(csrf);
+  
 };
 
 // takes the token and starts the page with it
