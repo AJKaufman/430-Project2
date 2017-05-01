@@ -4,6 +4,7 @@ let shopForm;
 let ShopFormClass;
 let CatListClass;
 let CatSelect;
+let CatSelectClass;
 let CatList;
 let CatDiv;
 let CatBuySuccess;
@@ -20,11 +21,8 @@ const handleCat = (e) => {
     return false;
   }
   
-  console.log('should display cat bought success soon');
   
   sendAjax('POST', $("#shopForm").attr("action"), $("#shopForm").serialize(), () => {
-    
-    console.log('rendering cat bought success');
     
     CatBuySuccessClass = React.createClass({
       render: renderCatBuySuccessClass
@@ -42,26 +40,29 @@ const handleCat = (e) => {
 
 const renderCatBuySuccessClass = (e) => {
 
-  render(
+  return(
     <h3>You bought a cat!</h3>
   );                                                                
 };
 
 const select = function(csrf, catID) {
-  console.log('select pressed');
   
 //  catRenderer = ReactDOM.render(
 //    <CatList csrf={csrf} />, document.querySelector("#cats")
 //  );
   
-  console.dir(this);
   const data = `_csrf=${csrf}&_id=${catID}`
   
-  console.dir(csrf);
-  console.dir(catID);
-  
-  sendAjax('POST', '/findByID', data, function(catSelected, callback) {
+  sendAjax('POST', '/findByID', data, (catSelected, callback) => {
     console.dir(catSelected); // AIDAN
+    
+    CatSelectClass = React.createClass({
+      render: renderCatSelect
+    });
+      
+    CatSelect = ReactDOM.render(
+      <CatSelectClass />, document.querySelector('#cats')
+    );
   });
       
   
@@ -74,6 +75,8 @@ const select = function(csrf, catID) {
 
 const renderCatSelect = function() {
  
+  console.log('rendering selected cat');
+  
   return(
     <div key={cat._id} className="cat">
       <img src="/assets/img/catFace.png" alt="cat face" className="catFace" />
@@ -139,7 +142,6 @@ const renderCatList = function() {
     );
   }
   
-  console.dir(this.props.csrf);
   const csrf = this.props.csrf;
   
   const catNodes = this.state.data.map(function(cat) {
@@ -164,6 +166,7 @@ const CreateShopFormClass = function(csrf) {
   
   shopForm = ReactDOM.render(
     <ShopFormClass csrf={csrf} />, document.querySelector("#cats")
+    
   );
 };
 
@@ -171,7 +174,6 @@ const CreateCatListClass = function(csrf) {
   // cat list render
   CatListClass = React.createClass({
     loadCatsFromServer: function() {
-      console.dir('this is : ' + this);
       sendAjax('GET', '/getCats', null, function(data) {
         this.setState({data:data.cats});
       }.bind(this));
@@ -204,11 +206,6 @@ const setupCatMaker = function(csrf) {
     e.preventDefault();
     CreateCatListClass(csrf);
     return false;
-  });
-  
-  
-  CatSelect = React.createClass({
-    render: renderCatSelect
   });
   
   CatDiv = React.createClass({
