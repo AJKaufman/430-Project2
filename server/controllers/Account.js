@@ -95,31 +95,28 @@ const changePass = (request, response) => {
 
 
   return Account.AccountModel.authenticate(req.body.username, req.body.pass, (err, account) => {
-    
-    if(err || !account) {
-      return res.status(401).json({ error: 'Meow...incorrect username or pass'})
+    if (err || !account) {
+      return res.status(401).json({ error: 'Meow...incorrect username or pass' });
     }
-    
+
     const newAccount = account;
-    
+
     return Account.AccountModel.generateHash(req.body.passNew, (salt, hash) => {
       newAccount.password = hash;
       newAccount.salt = salt;
-      
+
       const savePromise = newAccount.save();
-      
+
       savePromise.then(() => res.json({
         password: newAccount.password,
       }));
-      
+
       savePromise.catch((saveErr) => {
         res.json(saveErr);
       });
-      
-      return res.json({ redirect: '/maker'});
-      
+
+      return res.json({ redirect: '/maker' });
     });
-    
   });
 };
 

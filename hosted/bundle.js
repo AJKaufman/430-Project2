@@ -52,15 +52,14 @@ var renderCatBuySuccessClass = function renderCatBuySuccessClass(e) {
   );
 };
 
+// function to sendAjax that lets you view a specific cat's details
 var select = function select(csrf, catID) {
 
   var data = "_csrf=" + csrf + "&_id=" + catID;
 
   sendAjax('POST', '/findByID', data, function (selectedCat) {
 
-    console.dir(selectedCat.catInfo);
-    var thisCat = selectedCat.catInfo[0];
-    console.dir(thisCat);
+    var thisCat = selectedCat.catInfo;
 
     CatSelectClass = React.createClass({
       displayName: "CatSelectClass",
@@ -78,6 +77,7 @@ var select = function select(csrf, catID) {
   return false;
 };
 
+// renders the singular cat div
 var renderCatSelect = function renderCatSelect(cat) {
   return React.createElement(
     "div",

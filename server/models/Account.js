@@ -32,7 +32,7 @@ const AccountSchema = new mongoose.Schema({
   catHappiness: {
     type: Number,
     default: 0,
-  }
+  },
 });
 
 AccountSchema.statics.toAPI = doc => ({

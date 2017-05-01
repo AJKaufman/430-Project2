@@ -50,15 +50,14 @@ const renderCatBuySuccessClass = (e) => {
   );                                                                
 };
 
+// function to sendAjax that lets you view a specific cat's details
 const select = function(csrf, catID) {
   
   const data = `_csrf=${csrf}&_id=${catID}`;
   
   sendAjax('POST', '/findByID', data, function(selectedCat) {
 
-        console.dir(selectedCat.catInfo);
-        const thisCat = selectedCat.catInfo[0];
-        console.dir(thisCat);
+        const thisCat = selectedCat.catInfo;
     
         CatSelectClass = React.createClass({
           render: () => {                   // AIDAN this is what brakes retrieving data from selecting a cat
@@ -78,7 +77,8 @@ const select = function(csrf, catID) {
   return false;
 };
 
-const renderCatSelect = function(cat) {  
+// renders the singular cat div
+const renderCatSelect = (cat) => {  
   return(
     <div key={cat._id} className="cat">
       <img src="/assets/img/catFace.png" alt="cat face" className="catFace" />

@@ -20,7 +20,7 @@ const makeCat = (req, res) => {
   }
 
   // assign a new cat _id for each cat
-  
+
   const catData = {
     name: req.body.name,
     age: req.body.age,
@@ -48,23 +48,33 @@ const makeCat = (req, res) => {
 
 // lets you select a specific cat
 const select = (req, res) => {
-  console.log("controller.select");
-  
+  console.log('controller.select');
+
   return Cat.CatModel.findByID(req.body._id, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    console.dir(`happiness = ${docs.happiness}`);
-    docs.happiness++;
-    console.dir(`happiness = ${docs.happiness}`);
-    return res.json({ catInfo: docs });
-  });
-  
+    const newCat = docs;
+    console.dir(`new cat = ${newCat}`);
+    newCat.happiness += 1;
+    console.dir(`new cat = ${docs.happiness}`);
+    const savePromise = newCat.save();
 
+    savePromise.then(() => res.json({
+      happiness: newCat.happiness,
+    }));
+
+    savePromise.catch((saveError) => {
+      res.json(saveError);
+    });
+
+    return res.json({ catInfo: newCat });
+  });
 };
 
+// gets the cats in the form of an array called docs
 const getCats = (request, response) => {
   const req = request;
   const res = response;
@@ -79,6 +89,7 @@ const getCats = (request, response) => {
   });
 };
 
+// gets one cat as an aobject
 const getThisCat = (request, response) => {
   const req = request;
   const res = response;
