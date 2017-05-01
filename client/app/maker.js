@@ -22,7 +22,7 @@ const handleCat = (e) => {
   
   console.log('should display cat bought success soon');
   
-  sendAjax('POST', $("#shopForm").attr("action"), $("#shopForm").serialize(), {function() {
+  sendAjax('POST', $("#shopForm").attr("action"), $("#shopForm").serialize(), () => {
     
     console.log('rendering cat bought success');
     
@@ -35,7 +35,7 @@ const handleCat = (e) => {
       <CatBuySuccessClass />, document.querySelector('#main')
     );
      
-  }});
+  });
   
   return false;
 };

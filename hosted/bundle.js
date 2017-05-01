@@ -24,19 +24,17 @@ var handleCat = function handleCat(e) {
 
   console.log('should display cat bought success soon');
 
-  sendAjax('POST', $("#shopForm").attr("action"), $("#shopForm").serialize(), {
-    function: function _function() {
+  sendAjax('POST', $("#shopForm").attr("action"), $("#shopForm").serialize(), function () {
 
-      console.log('rendering cat bought success');
+    console.log('rendering cat bought success');
 
-      CatBuySuccessClass = React.createClass({
-        displayName: "CatBuySuccessClass",
+    CatBuySuccessClass = React.createClass({
+      displayName: "CatBuySuccessClass",
 
-        render: renderCatBuySuccessClass
-      });
+      render: renderCatBuySuccessClass
+    });
 
-      CatBuySuccess = ReactDOM.render(React.createElement(CatBuySuccessClass, null), document.querySelector('#main'));
-    }
+    CatBuySuccess = ReactDOM.render(React.createElement(CatBuySuccessClass, null), document.querySelector('#main'));
   });
 
   return false;
