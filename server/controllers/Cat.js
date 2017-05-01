@@ -57,7 +57,7 @@ const select = (req, res) => {
     }
 
     console.dir(`happiness = ${docs.happiness}`);
-    docs.happiness = docs.happiness + 1;
+    docs.happiness++;
     console.dir(`happiness = ${docs.happiness}`);
     return res.json({ catInfo: docs });
   });
